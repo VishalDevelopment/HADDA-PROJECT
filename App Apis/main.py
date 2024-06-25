@@ -7,6 +7,7 @@ from AllApis.Products.addProduct import AddProduct
 from AllApis.Products.getAllProducts import getAllProducts
 
 from AllApis.Orders.insertOrder import insertOrder
+from AllApis.Orders.getAllOrders import getAllOrdersitem
 app = Flask(__name__)
 @app.route("/")
 
@@ -74,7 +75,11 @@ def orderItem():
         return jsonify({'success':200,'message':"Successfully Ordered Items"})
      else:
         return jsonify({'success':400,'message':"Failed to order"})
+     
 
+@app.route('/getAllOrder',methods=['GET'])
+def getAllOrder():
+    return getAllOrdersitem()
 
 if __name__ == "__main__":
     createTables()

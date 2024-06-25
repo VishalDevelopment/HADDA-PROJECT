@@ -13,7 +13,6 @@ def insertOrder(user_id,name,email,phone_no,category,price,address):
     time = datetime.now().strftime('%H:%M')
     dateCurrent = date.today()
     
-    print(time)
     cursor.execute("""INSERT INTO Orders(
                    id,userID,name,email,phone_no,category,price,address,orderTiming,orderDate)
                    VALUES

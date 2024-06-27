@@ -1,4 +1,4 @@
-from flask import Flask , request,jsonify
+from flask import Flask , request,jsonify,json
 from AllApis.tables import createTables
 from AllApis.Users.createUser import createUser
 from AllApis.Users.getSpecificUser import getUserData
@@ -8,6 +8,7 @@ from AllApis.Products.getAllProducts import getAllProducts
 
 from AllApis.Orders.insertOrder import insertOrder
 from AllApis.Orders.getAllOrders import getAllOrdersitem
+from AllApis.Orders.getSpecificOrder import getOrdersByUserId
 app = Flask(__name__)
 @app.route("/")
 
@@ -80,6 +81,17 @@ def orderItem():
 @app.route('/getAllOrder',methods=['GET'])
 def getAllOrder():
     return getAllOrdersitem()
+
+
+
+
+@app.route('/orders',methods=['POST'])
+def get_orders_by_user_id():
+    user_id = request.form['user_id']
+    if not user_id:
+        return json.dumps({'error': 'Missing user_id parameter'}), 400  # Handle missing parameter
+    orders = getOrdersByUserId(user_id)
+    return json.dumps(orders)
 
 if __name__ == "__main__":
     createTables()

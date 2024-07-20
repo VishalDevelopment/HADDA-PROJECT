@@ -5,6 +5,7 @@ import json
 def getAllOrdersitem():
     conn=sqlite3.connect("HADDA_APP.db")
     cursor= conn.cursor()
+    
     cursor.execute("SELECT * From Orders")
     orders= cursor.fetchall()
     conn.close()

@@ -3,12 +3,14 @@ from AllApis.tables import createTables
 from AllApis.Users.createUser import createUser
 from AllApis.Users.getSpecificUser import getUserData
 from AllApis.Users.getUserId import get_user_id_by_credentials
+from AllApis.Users.GetAllUser import GetAllUser
 from AllApis.Products.addProduct import AddProduct
 from AllApis.Products.getAllProducts import getAllProducts
 
 from AllApis.Orders.insertOrder import insertOrder
 from AllApis.Orders.getAllOrders import getAllOrdersitem
-from AllApis.Orders.getSpecificOrder import getOrdersByUserId
+from AllApis.Orders.getSpecificOrder import getOrdersByUserId,OrderbyOrderId
+from AllApis.Orders.orderStatusUpdate import orderstatusUpdate
 app = Flask(__name__)
 @app.route("/")
 
@@ -26,7 +28,7 @@ def CreateUser():
     if check == True:
         return jsonify({'success':200,'message':"Successfully Sign Up"})
     else:
-        return jsonify({'success':400,'message':"Failed Sign Up"})
+        return jsonify({'success':400,'message':"Email already in Use"})
     
 
 @app.route("/GetUser",methods = ['POST'])
@@ -69,9 +71,10 @@ def orderItem():
      email = request.form['email']
      phoneNo = request.form['phoneNo']
      category = request.form['category']
+     unit = request.form['unit']
      price = request.form['price']
      address=request.form['address']
-     check = insertOrder(userId,name,email,phoneNo,category,price,address)
+     check = insertOrder(userId,name,email,phoneNo,category,unit,price,address)
      if check == True:
         return jsonify({'success':200,'message':"Successfully Ordered Items"})
      else:
@@ -88,10 +91,35 @@ def getAllOrder():
 @app.route('/orders',methods=['POST'])
 def get_orders_by_user_id():
     user_id = request.form['user_id']
-    if not user_id:
-        return json.dumps({'error': 'Missing user_id parameter'}), 400  # Handle missing parameter
     orders = getOrdersByUserId(user_id)
-    return json.dumps(orders)
+    if orders :
+        return json.dumps(orders)
+    else:
+        return json.dumps(orders)
+    
+
+@app.route('/AllUser',methods=['GET'])
+def AllUser():
+    return GetAllUser()
+
+@app.route('/SpecificOrder',methods=['POST'])
+def get_specific_order ():
+    id = request.form['orderId']
+    specificOrder = OrderbyOrderId(id)
+    return specificOrder
+
+@app.route('/UpdateStatus',methods=['POST'])
+def statusUpdatewithOrderId():
+    orderId = request.form['orderId']
+    weight = request.form['weight']
+    price = request.form['price']
+    status = request.form['status']
+
+    try:
+        orderstatusUpdate(orderId,weight,price,status)
+        return jsonify({'message' : 'Order Status Updated !!', 'status' : 200}), 200
+    except Exception as error:
+        return jsonify ({'message' : "Order Status Couldn't Update !!",'status' :400, 'Exception' : str(error)})
 
 if __name__ == "__main__":
     createTables()

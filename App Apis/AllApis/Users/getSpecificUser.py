@@ -10,6 +10,7 @@ def getUserData(userId):
     conn.close()
    
     userJson=[]
+    user={}
     for user in users:
         tempUser= {
         "id": user[0],
@@ -20,7 +21,7 @@ def getUserData(userId):
         "address": user[5],
         "password": user[6] 
         }
+        user=tempUser
+    
 
-        userJson.append(tempUser)
-
-    return json.dumps(userJson)
+    return json.dumps(user)

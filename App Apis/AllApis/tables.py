@@ -28,8 +28,11 @@ def createTables():
                    email VARCHAR(50),
                    phone_no VARCHAR(11),
                    category VARCHAR(100),
+                   unit INTEGER,
+                   weight REAL NOT NULL,
                    price REAL NOT NULL,
                    address VARCHAR(200),
+                   status VARCHAR(100),
                    orderTiming VARCHAR(100),
                    orderDate VARCHAR(100))""")
     
